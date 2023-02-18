@@ -1,5 +1,5 @@
 import qs from "qs";
-import { apiCall, requester } from "@/services/apiCall";
+import { apiCall } from "@/services/apiCall";
 
 const commonParams = {
   redirect_uri: import.meta.env.VITE_SPOTIFY_HOST,
@@ -17,25 +17,7 @@ export const spotifyAuthCall = async (
       ...commonParams,
     };
 
-    // const searchParams = Object.keys(params)
-    //   .map(
-    //     (key) =>
-    //       encodeURIComponent(key) +
-    //       "=" +
-    //       encodeURIComponent(params[key as keyof typeof params])
-    //   )
-    //   .join("&");
-
     const searchParams = qs.stringify(params);
-
-    // const spotifyCall = await requester(
-    //   {
-    //     baseURL: "https://accounts.spotify.com",
-    //   },
-    //   "application/x-www-form-urlencoded"
-    // ).post("/api/token", searchParams);
-    // console.log(spotifyCall);
-    // return spotifyCall;
 
     const spotifyCall = await apiCall({
       method: "POST",

@@ -2,8 +2,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { lazy, Suspense } from "react";
 
-const HomeComponent = lazy(() =>
-  import("@/pages/Home").then(({ Home }) => ({ default: Home }))
+const LoginPage = lazy(() =>
+  import("@/pages/Login").then(({ Login }) => ({ default: Login }))
 );
 
 const router = createBrowserRouter([
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
           </div>
         }
       >
-        <HomeComponent />
+        <LoginPage />
       </Suspense>
     ),
   },

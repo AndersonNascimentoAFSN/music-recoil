@@ -17,7 +17,7 @@ const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
   import.meta.env.VITE_SPOTIFY_HOST
 }&scope=user-read-private`;
 
-export function Home() {
+export function Login() {
   const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
   const [spotifyRefreshToken, setSpotifyRefreshToken] = useRecoilState(
     spotifyRefreshTokenAtom
@@ -40,8 +40,6 @@ export function Home() {
         } else {
           response = await spotifyAuthCall({ code: spotifyCode });
         }
-
-        console.log(response);
 
         setSpotifyRefreshToken(response?.refresh_token);
         setSpotifyTokenResponse(response);
