@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import homeImage from "@/assets/images/home.png";
+import { spotifyAuthCall } from "@/utils/spotifyAuthCall";
 
 const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
   import.meta.env.VITE_APP_SPOTIFY_CLIENT_ID
@@ -12,6 +13,12 @@ const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
 export function Home() {
   const location = useLocation();
 
+  spotifyAuthCall;
+
+  async function authenticateUser(spotifyCode: string) {
+    const result = await spotifyAuthCall(spotifyCode);
+  }
+
   function handleLogin() {
     window.location.replace(spotifyUrl);
   }
@@ -19,6 +26,8 @@ export function Home() {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const spotifyCode = urlParams.get("code");
+
+    if (spotifyCode) authenticateUser(spotifyCode);
   }, [location.search]);
 
   return (
