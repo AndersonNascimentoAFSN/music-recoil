@@ -1,8 +1,12 @@
+import { Routes } from "@/routes/index";
+
+import "./styles/styles.css";
+
 export function App() {
   return (
-    <div>
-      <h1>Hello World!</h1>
-    </div>
+    <>
+      <Routes />
+    </>
   );
 }
 
