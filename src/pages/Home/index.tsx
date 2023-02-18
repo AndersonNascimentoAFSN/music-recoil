@@ -1,8 +1,15 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useLocation } from "react-router-dom";
 
-import homeImage from "@/assets/images/home.png";
+import {
+  isAuthenticatedAtom,
+  spotifyRefreshTokenAtom,
+  spotifyTokenResponseAtom,
+} from "@/store/auth/atoms";
 import { spotifyAuthCall } from "@/utils/spotifyAuthCall";
+
+import homeImage from "@/assets/images/home.png";
 
 const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
   import.meta.env.VITE_APP_SPOTIFY_CLIENT_ID
@@ -11,13 +18,45 @@ const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
 }&scope=user-read-private`;
 
 export function Home() {
+  const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
+  const [spotifyRefreshToken, setSpotifyRefreshToken] = useRecoilState(
+    spotifyRefreshTokenAtom
+  );
+  const [spotifyTokenResponse, setSpotifyTokenResponse] = useRecoilState(
+    spotifyTokenResponseAtom
+  );
+
   const location = useLocation();
 
-  spotifyAuthCall;
+  const authenticateUser = useCallback(
+    async (spotifyCode: string) => {
+      try {
+        let response;
 
-  async function authenticateUser(spotifyCode: string) {
-    const result = await spotifyAuthCall(spotifyCode);
-  }
+        if (spotifyRefreshToken) {
+          response = await spotifyAuthCall({
+            refresh_token: spotifyRefreshToken,
+          });
+        } else {
+          response = await spotifyAuthCall({ code: spotifyCode });
+        }
+
+        console.log(response);
+
+        setSpotifyRefreshToken(response?.refresh_token);
+        setSpotifyTokenResponse(response);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [
+      setSpotifyRefreshToken,
+      setSpotifyTokenResponse,
+      setIsAuthenticated,
+      spotifyRefreshToken,
+    ]
+  );
 
   function handleLogin() {
     window.location.replace(spotifyUrl);

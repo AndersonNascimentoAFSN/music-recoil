@@ -7,10 +7,12 @@ const commonParams = {
   client_secret: import.meta.env.VITE_APP_SPOTIFY_CLIENT_SECRET,
 };
 
-export const spotifyAuthCall = async (code: string) => {
+export const spotifyAuthCall = async (
+  requiredParams: { code: string } | { refresh_token: string }
+) => {
   try {
     const params = {
-      code,
+      ...requiredParams,
       grant_type: "authorization_code",
       ...commonParams,
     };
