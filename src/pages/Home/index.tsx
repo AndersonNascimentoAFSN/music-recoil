@@ -1,13 +1,31 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 import homeImage from "@/assets/images/home.png";
 
+const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
+  import.meta.env.VITE_APP_SPOTIFY_CLIENT_ID
+}&response_type=code&redirect_uri=${
+  import.meta.env.VITE_SPOTIFY_HOST
+}&scope=user-read-private`;
+
 export function Home() {
+  const location = useLocation();
+
+  function handleLogin() {
+    window.location.replace(spotifyUrl);
+  }
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const spotifyCode = urlParams.get("code");
+  }, [location.search]);
+
   return (
     <div
       style={{
-        // display: "grid",
-        // gridTemplateColumns: "repeat(2, 1fr)",
         width: "100%",
-        // height: "100vh",
+        height: "100vh",
         display: "flex",
       }}
     >
@@ -21,7 +39,6 @@ export function Home() {
           alignItems: "center",
           paddingLeft: "4rem",
           paddingRight: "4rem",
-          height: "100vh",
         }}
       >
         <h3
@@ -49,6 +66,7 @@ export function Home() {
             fontSize: "1.3rem",
             fontWeight: 700,
           }}
+          onClick={handleLogin}
         >
           Iniciar sessão
         </button>
