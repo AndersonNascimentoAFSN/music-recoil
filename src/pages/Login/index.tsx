@@ -26,6 +26,8 @@ export function Login() {
     spotifyTokenResponseAtom
   );
 
+  console.log(spotifyTokenResponse)
+
   const location = useLocation();
 
   const authenticateUser = useCallback(

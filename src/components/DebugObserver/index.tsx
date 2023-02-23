@@ -12,7 +12,7 @@ export function DebugObserver() {
 
       if (
         atom.state === "hasValue" &&
-        atom.contents !== undefined && /* !error &&  */
+        atom.contents !== undefined /* !error &&  */ &&
         keysAbleToSave.indexOf(modifiedAtom.key) !== -1
       ) {
         localStorage.setItem(
