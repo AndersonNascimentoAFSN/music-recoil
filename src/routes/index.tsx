@@ -6,6 +6,12 @@ const LoginPage = lazy(() =>
   import("@/pages/Login").then(({ Login }) => ({ default: Login }))
 );
 
+const HomePage = lazy(() =>
+  import("@/pages/Home").then(({ Home }) => ({ default: Home }))
+);
+
+import { PrivateRoute } from "@/components/PrivateRoute";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -18,6 +24,22 @@ const router = createBrowserRouter([
         }
       >
         <LoginPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/home",
+    element: (
+      <Suspense
+        fallback={
+          <div>
+            <span>Loading...</span>
+          </div>
+        }
+      >
+        <PrivateRoute>
+          <HomePage />
+        </PrivateRoute>
       </Suspense>
     ),
   },

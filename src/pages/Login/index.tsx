@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   isAuthenticatedAtom,
@@ -26,9 +26,8 @@ export function Login() {
     spotifyTokenResponseAtom
   );
 
-  console.log(spotifyTokenResponse)
-
   const location = useLocation();
+  const navigate = useNavigate();
 
   const authenticateUser = useCallback(
     async (spotifyCode: string) => {
@@ -38,16 +37,28 @@ export function Login() {
         if (spotifyRefreshToken) {
           response = await spotifyAuthCall({
             refresh_token: spotifyRefreshToken,
+            grant_type: "refresh_token",
           });
         } else {
-          response = await spotifyAuthCall({ code: spotifyCode });
+          response = await spotifyAuthCall({
+            code: spotifyCode,
+            grant_type: "authorization_code",
+          });
         }
 
-        setSpotifyRefreshToken(response?.refresh_token);
-        setSpotifyTokenResponse(response);
-        setIsAuthenticated(true);
+        if (response.access_token) {
+          setSpotifyRefreshToken(response?.refresh_token);
+          setSpotifyTokenResponse(response);
+          setIsAuthenticated(true);
+
+          navigate("/home");
+        } else {
+          throw new Error("Usuário não foi autenticado!");
+        }
       } catch (error) {
         console.log(error);
+        setSpotifyTokenResponse(undefined);
+        setSpotifyTokenResponse(undefined);
       }
     },
     [
