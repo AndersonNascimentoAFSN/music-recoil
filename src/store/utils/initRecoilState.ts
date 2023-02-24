@@ -2,6 +2,7 @@ import { keysAbleToSave } from "@/components/DebugObserver";
 import {
   spotifyRefreshTokenAtom,
   spotifyTokenResponseAtom,
+  isAuthenticatedAtom
 } from "@/store/auth/atoms";
 
 const atomsToSave = [
@@ -12,6 +13,10 @@ const atomsToSave = [
   {
     key: keysAbleToSave[1],
     atom: spotifyTokenResponseAtom,
+  },
+  {
+    key: keysAbleToSave[2],
+    atom: isAuthenticatedAtom,
   },
 ];
 

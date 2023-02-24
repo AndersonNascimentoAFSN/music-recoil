@@ -18,7 +18,7 @@ const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
 }&scope=user-read-private`;
 
 export function Login() {
-  const setIsAuthenticated = useSetRecoilState(isAuthenticatedAtom);
+  const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthenticatedAtom);
   const [spotifyRefreshToken, setSpotifyRefreshToken] = useRecoilState(
     spotifyRefreshTokenAtom
   );
@@ -30,7 +30,7 @@ export function Login() {
   const navigate = useNavigate();
 
   const authenticateUser = useCallback(
-    async (spotifyCode: string) => {
+    async (spotifyCode: string | null) => {
       try {
         let response;
 
@@ -77,7 +77,7 @@ export function Login() {
     const urlParams = new URLSearchParams(location.search);
     const spotifyCode = urlParams.get("code");
 
-    if (spotifyCode) authenticateUser(spotifyCode);
+    if (spotifyCode || isAuthenticated) authenticateUser(spotifyCode);
   }, [location.search]);
 
   return (

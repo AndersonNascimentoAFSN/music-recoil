@@ -8,7 +8,7 @@ const commonParams = {
 };
 
 export const spotifyAuthCall = async (
-  requiredParams: { code: string, grant_type: string } | { refresh_token: string, grant_type: string }
+  requiredParams: { code: string | null, grant_type: string } | { refresh_token: string, grant_type: string }
 ) => {
   try {
     const params = {
