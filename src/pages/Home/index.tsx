@@ -1,6 +1,33 @@
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
+
+import { spotifyTokenResponseAtom } from "@/store/auth/atoms";
+import { spotifySearchCall } from "@/utils/spotifySearchCall";
+
 import seekerImage from "@/assets/images/seeker.png";
 
 export function Home() {
+  const [searchText, setSearchText] = useState("");
+  const tokenResponse = useRecoilValue<{ access_token: string } | undefined>(
+    spotifyTokenResponseAtom
+  );
+
+  async function handleSearchClick() {
+    const params = {
+      q: searchText,
+      type: "track,artist",
+      offset: "50",
+    };
+
+    if (tokenResponse) {
+      const searchResponse = await spotifySearchCall(
+        params,
+        tokenResponse?.access_token
+      );
+      console.log(searchResponse);
+    }
+  }
+
   return (
     <div
       style={{
@@ -49,6 +76,8 @@ export function Home() {
             border: "1px solid #b3b3b3",
             fontFamily: "Montserrat, sans-serif",
           }}
+          value={searchText}
+          onChange={({ target: { value } }) => setSearchText(value)}
         />
         <button
           type="button"
@@ -63,6 +92,7 @@ export function Home() {
             padding: "8px 20px",
             border: "none",
           }}
+          onClick={handleSearchClick}
         >
           Buscar
         </button>
