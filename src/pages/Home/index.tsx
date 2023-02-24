@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 import { spotifyTokenResponseAtom } from "@/store/auth/atoms";
+import { spotifyResultSongsAtom } from "@/store/songs/atoms";
 import { spotifySearchCall } from "@/utils/spotifySearchCall";
+
+import { HomeFilters } from "@/components/HomeFilters";
 
 import seekerImage from "@/assets/images/seeker.png";
 
@@ -10,6 +13,9 @@ export function Home() {
   const [searchText, setSearchText] = useState("");
   const tokenResponse = useRecoilValue<{ access_token: string } | undefined>(
     spotifyTokenResponseAtom
+  );
+  const [searchResponse, setSearchResponse] = useRecoilState(
+    spotifyResultSongsAtom
   );
 
   async function handleSearchClick() {
@@ -22,7 +28,7 @@ export function Home() {
         },
         token: tokenResponse?.access_token,
       });
-      console.log(searchResponse);
+      setSearchResponse(searchResponse);
     }
   }
 
@@ -95,6 +101,8 @@ export function Home() {
           Buscar
         </button>
       </div>
+
+      <HomeFilters />
     </div>
   );
 }
