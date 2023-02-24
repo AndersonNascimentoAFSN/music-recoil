@@ -1,16 +1,25 @@
 import { apiCall } from "@/services/apiCall";
 import { ParamsSearchSpotify } from "@/types/ParamsSearchSpotify";
 
-export const spotifySearchCall = async (
-  params: ParamsSearchSpotify,
-  token: string
-) => {
+type SpotifySearchCallParams = {
+  params: ParamsSearchSpotify;
+  token: string;
+};
+
+export const spotifySearchCall = async ({
+  params,
+  token,
+}: SpotifySearchCallParams) => {
   try {
     const url = new URL("https://api.spotify.com/v1/search");
 
     for (const item of Object.entries(params)) {
       const [key, value] = item;
-      url.searchParams.append(key, value);
+
+      url.searchParams.append(
+        key,
+        Array.isArray(value) ? value.join(",") : value
+      );
     }
 
     const spotifyCall = await apiCall({

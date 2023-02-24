@@ -13,17 +13,15 @@ export function Home() {
   );
 
   async function handleSearchClick() {
-    const params = {
-      q: searchText,
-      type: "track,artist",
-      offset: "50",
-    };
-
     if (tokenResponse) {
-      const searchResponse = await spotifySearchCall(
-        params,
-        tokenResponse?.access_token
-      );
+      const searchResponse = await spotifySearchCall({
+        params: {
+          q: searchText,
+          type: ["track", "artist"],
+          offset: "50",
+        },
+        token: tokenResponse?.access_token,
+      });
       console.log(searchResponse);
     }
   }
