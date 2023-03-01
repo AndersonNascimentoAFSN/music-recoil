@@ -8,7 +8,7 @@ export type TypesSearchSpotify =
 
 export type ParamsSearchSpotify = {
   q: string;
-  type: TypesSearchSpotify[];
+  type: string | null;
   market?: string;
   limit?: string;
   offset?: string;

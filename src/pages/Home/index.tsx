@@ -2,12 +2,22 @@ import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 import { spotifyTokenResponseAtom } from "@/store/auth/atoms";
-import { spotifyResultSongsAtom } from "@/store/songs/atoms";
+import {
+  albumAtom,
+  artistAtom,
+  episodeAtom,
+  playlistAtom,
+  showAtom,
+  trackAtom,
+  spotifyResultSongsAtom,
+} from "@/store/songs/atoms";
+
 import { spotifySearchCall } from "@/utils/spotifySearchCall";
 
 import { HomeFilters } from "@/components/HomeFilters";
 
 import seekerImage from "@/assets/images/seeker.png";
+import { filterTypeSelector } from "@/store/songs/selectors";
 
 export function Home() {
   const [searchText, setSearchText] = useState("");
@@ -18,16 +28,21 @@ export function Home() {
     spotifyResultSongsAtom
   );
 
+  const [types, setTypes] = useRecoilState(filterTypeSelector);
+
   async function handleSearchClick() {
     if (tokenResponse) {
       const searchResponse = await spotifySearchCall({
         params: {
           q: searchText,
-          type: ["track", "artist"],
+          type: types,
           offset: "50",
         },
         token: tokenResponse?.access_token,
       });
+
+      console.log(searchResponse);
+
       setSearchResponse(searchResponse);
     }
   }

@@ -1,3 +1,5 @@
+import { useRecoilState, useResetRecoilState } from "recoil";
+
 import {
   albumAtom,
   artistAtom,
@@ -7,7 +9,7 @@ import {
   spotifyResultSongsAtom,
   trackAtom,
 } from "@/store/songs/atoms";
-import { useRecoilState } from "recoil";
+import { filterTypeSelector } from "@/store/songs/selectors";
 
 export function HomeFilters() {
   const [album, setAlbum] = useRecoilState(albumAtom);
@@ -19,7 +21,7 @@ export function HomeFilters() {
 
   const [spotify, setSpotify] = useRecoilState(spotifyResultSongsAtom);
 
-  console.log(album, artist, episode, playlist, show, track);
+  const resetFilters = useResetRecoilState(filterTypeSelector);
 
   return (
     <div
@@ -33,7 +35,7 @@ export function HomeFilters() {
         minWidth: "500px",
       }}
     >
-      <label>
+      <label style={{ cursor: "pointer" }}>
         Álbum
         <input
           type="checkbox"
@@ -45,7 +47,7 @@ export function HomeFilters() {
         />
       </label>
 
-      <label>
+      <label style={{ cursor: "pointer" }}>
         Artista
         <input
           type="checkbox"
@@ -57,7 +59,7 @@ export function HomeFilters() {
         />
       </label>
 
-      <label>
+      <label style={{ cursor: "pointer" }}>
         Playlist
         <input
           type="checkbox"
@@ -69,7 +71,7 @@ export function HomeFilters() {
         />
       </label>
 
-      <label>
+      <label style={{ cursor: "pointer" }}>
         Canção
         <input
           type="checkbox"
@@ -81,7 +83,7 @@ export function HomeFilters() {
         />
       </label>
 
-      <label>
+      <label style={{ cursor: "pointer" }}>
         Episódio
         <input
           type="checkbox"
@@ -93,7 +95,7 @@ export function HomeFilters() {
         />
       </label>
 
-      <label>
+      <label style={{ cursor: "pointer" }}>
         Show
         <input
           type="checkbox"
@@ -104,6 +106,8 @@ export function HomeFilters() {
           checked={!!show}
         />
       </label>
+
+      <button onClick={resetFilters}>Limpar Filtros</button>
     </div>
   );
 }

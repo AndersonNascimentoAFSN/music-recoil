@@ -16,10 +16,12 @@ export const spotifySearchCall = async ({
     for (const item of Object.entries(params)) {
       const [key, value] = item;
 
-      url.searchParams.append(
-        key,
-        Array.isArray(value) ? value.join(",") : value
-      );
+      if (value) {
+        url.searchParams.append(
+          key,
+          value
+        );
+      }
     }
 
     const spotifyCall = await apiCall({
