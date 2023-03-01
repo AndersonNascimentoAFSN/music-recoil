@@ -1,8 +1,10 @@
-import { keysAbleToSave } from "@/components/DebugObserver";
+import { MutableSnapshot } from "recoil";
+
+import { keysAbleToSave } from "@/store/utils/DebugObserver";
 import {
   spotifyRefreshTokenAtom,
   spotifyTokenResponseAtom,
-  isAuthenticatedAtom
+  isAuthenticatedAtom,
 } from "@/store/auth/atoms";
 
 const atomsToSave = [
@@ -20,7 +22,7 @@ const atomsToSave = [
   },
 ];
 
-export const initRecoilState = ({ set }) => {
+export const initRecoilState = ({ set }: MutableSnapshot) => {
   const localStorageLength = localStorage.length;
 
   for (let i = 0; i < localStorageLength; i += 1) {
@@ -31,7 +33,8 @@ export const initRecoilState = ({ set }) => {
       const atom = atomsToSave[indexOfKey].atom;
       set(
         atom,
-        JSON.parse(localStorage.getItem(locaStorageKey || "") || "")?.value ?? undefined,
+        JSON.parse(localStorage.getItem(locaStorageKey || "") || "")?.value ??
+          undefined
       );
     }
   }

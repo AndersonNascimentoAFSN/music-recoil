@@ -10,7 +10,7 @@ const HomePage = lazy(() =>
   import("@/pages/Home").then(({ Home }) => ({ default: Home }))
 );
 
-import { PrivateRoute } from "@/components/PrivateRoute";
+import { PrivateRoute } from "@/routes/utils/PrivateRoute";
 
 const router = createBrowserRouter([
   {
