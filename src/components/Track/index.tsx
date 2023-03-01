@@ -3,20 +3,27 @@ import { memo } from "react";
 import { ListMusic } from "@/components/ListMusic";
 
 type TrackProps = {
-  id: string;
-  name: string;
-  artist: string;
-  onClick: string;
-  imageUrl: string;
-  handleClick: (externalUrl: string) => void;
-  releaseDate: string;
-  externalUrl: string;
+  items: {
+    id: string;
+    name: string;
+    artist: string;
+    onClick: string;
+    imageUrl: string;
+    handleClick: (externalUrl: string) => void;
+    releaseDate: string;
+    externalUrl: string;
+  }
 };
 
-export const Track = memo(function (props: TrackProps) {
+export const Track = memo(function ({ items }: TrackProps[]) {
   return (
-    <div>
-      <ListMusic {...props} />
-    </div>
+    <>
+      <h3 style={{ fontWeight: "bold" }}>Canções</h3>
+      <div style={{ display: "flex" }}>
+        {items.map((item) => (
+          <ListMusic key={item.id} {...item} />
+        ))}
+      </div>
+    </>
   );
 });
