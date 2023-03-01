@@ -18,6 +18,8 @@ import { HomeFilters } from "@/components/HomeFilters";
 
 import seekerImage from "@/assets/images/seeker.png";
 import { filterTypeSelector } from "@/store/songs/selectors";
+import { Track } from "@/components/Track";
+import { TrackType } from "@/types/Track";
 
 export function Home() {
   const [searchText, setSearchText] = useState("");
@@ -32,7 +34,7 @@ export function Home() {
 
   async function handleSearchClick() {
     if (tokenResponse) {
-      const searchResponse = await spotifySearchCall({
+      const result = await spotifySearchCall({
         params: {
           q: searchText,
           type: types,
@@ -41,11 +43,21 @@ export function Home() {
         token: tokenResponse?.access_token,
       });
 
-      console.log(searchResponse);
-
-      setSearchResponse(searchResponse);
+      setSearchResponse(result);
     }
   }
+
+  const tracks = searchResponse?.tracks?.items.map((item: TrackType) => ({
+    id: item?.id,
+    name: item?.name,
+    artist: item?.artists[0]?.name,
+    handleClick: (externalUrl: string) => console.log(externalUrl),
+    externalUrl: item?.external_urls?.spotify,
+    imageUrl: item?.album?.images[0]?.url,
+    releaseDate: new Intl.DateTimeFormat("pt-BR", {
+      year: "numeric",
+    }).format(new Date(item?.album?.release_date)),
+  }));
 
   return (
     <div
@@ -118,6 +130,24 @@ export function Home() {
       </div>
 
       <HomeFilters />
+
+      <div
+        style={{
+          background: "#F4F4F4",
+          // margin: '2rem 5rem',
+          maxWidth: "1200px",
+          borderRadius: "25px",
+          margin: "0 auto",
+          padding: "2rem 3rem",
+          overflowX: "scroll",
+        }}
+      >
+        <h3 style={{ fontWeight: "bold" }}>Canções</h3>
+        <div style={{ display: "flex" }}>
+          {tracks?.length > 0 &&
+            tracks.map((track) => <Track key={track.id} {...track} />)}
+        </div>
+      </div>
     </div>
   );
 }
