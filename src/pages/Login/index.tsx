@@ -10,6 +10,9 @@ import {
 import { spotifyAuthCall } from "@/utils/spotifyAuthCall";
 
 import homeImage from "@/assets/images/home.png";
+import { BackgroundImage, LoginContainer, SessionContainer } from "./styles";
+import { Heading } from "@/components/Heading";
+import { Button } from "@/components/Button";
 
 const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
   import.meta.env.VITE_APP_SPOTIFY_CLIENT_ID
@@ -18,7 +21,8 @@ const spotifyUrl = `https://accounts.spotify.com/authorize?client_id=${
 }&scope=user-read-private`;
 
 export function Login() {
-  const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthenticatedAtom);
+  const [isAuthenticated, setIsAuthenticated] =
+    useRecoilState(isAuthenticatedAtom);
   const [spotifyRefreshToken, setSpotifyRefreshToken] = useRecoilState(
     spotifyRefreshTokenAtom
   );
@@ -81,65 +85,20 @@ export function Login() {
   }, [location.search]);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "40%",
-          minWidth: "400px",
-          justifyContent: "center",
-          alignItems: "center",
-          paddingLeft: "4rem",
-          paddingRight: "4rem",
-        }}
-      >
-        <h3
-          style={{
-            fontWeight: 800,
-            lineHeight: "50px",
-            fontSize: "3.3rem",
-            margin: 0,
-          }}
-        >
-          Bem-vindo de novo
-        </h3>
-        <h6 style={{ marginTop: "6%", marginBottom: "6%", fontSize: "1.5rem" }}>
-          Identifique-se para encontrar sua música favorita
-        </h6>
-        <button
-          style={{
-            border: "none",
-            backgroundColor: "#1DB954",
-            width: "328px",
-            height: "52px",
-            borderRadius: "10px",
-            cursor: "pointer",
-            color: "#FFFFFF",
-            fontSize: "1.3rem",
-            fontWeight: 700,
-          }}
-          onClick={handleLogin}
-        >
-          Iniciar sessão
-        </button>
-      </div>
+    <LoginContainer>
+      <SessionContainer>
+        <Heading size="lg" as="h1">
+          Bem-vindo!
+        </Heading>
 
-      <div
-        style={{
-          backgroundImage: `url(${homeImage})`,
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          width: "60%",
-        }}
-      />
-    </div>
+        <Heading size="md" as="h2" css={{ marginBottom: "10px" }}>
+          Identifique-se para encontrar sua música favorita
+        </Heading>
+
+        <Button onClick={handleLogin}>Iniciar sessão</Button>
+      </SessionContainer>
+
+      <BackgroundImage />
+    </LoginContainer>
   );
 }
