@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-type ListMusicProps = {
+type ListItemProps = {
   id: string;
   name: string;
   artist: string;
@@ -11,7 +11,7 @@ type ListMusicProps = {
   externalUrl: string;
 };
 
-export const ListMusic = memo(function ({
+export const ListItem = memo(function ({
   id,
   name,
   artist,
@@ -19,7 +19,7 @@ export const ListMusic = memo(function ({
   handleClick,
   releaseDate,
   externalUrl,
-}: ListMusicProps) {
+}: ListItemProps) {
   return (
     <div
       style={{

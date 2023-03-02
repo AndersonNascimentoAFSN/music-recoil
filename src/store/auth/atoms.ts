@@ -10,7 +10,7 @@ export const spotifyRefreshTokenAtom = atom({
   default: undefined,
 });
 
-export const spotifyTokenResponseAtom = atom({
+export const spotifyTokenResponseAtom = atom<{ access_token: string } | undefined>({
   key: "spotifyTokenResponse",
   default: undefined,
 });

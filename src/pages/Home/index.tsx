@@ -1,36 +1,25 @@
-import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
+import { HomeFilters } from "@/components/HomeFilters";
+import { Items } from "@/components/Items";
+
 import { spotifyTokenResponseAtom } from "@/store/auth/atoms";
-import {
-  albumAtom,
-  artistAtom,
-  episodeAtom,
-  playlistAtom,
-  showAtom,
-  trackAtom,
-  spotifyResultSongsAtom,
-} from "@/store/songs/atoms";
+import { spotifyResultSongsAtom, searchTextAtom } from "@/store/songs/atoms";
+import { filterTypeSelector } from "@/store/songs/selectors";
 
 import { spotifySearchCall } from "@/utils/spotifySearchCall";
 
-import { HomeFilters } from "@/components/HomeFilters";
-
 import seekerImage from "@/assets/images/seeker.png";
-import { filterTypeSelector } from "@/store/songs/selectors";
-import { Track } from "@/components/Track";
-import { TrackType } from "@/types/Track";
 
 export function Home() {
-  const [searchText, setSearchText] = useState("");
-  const tokenResponse = useRecoilValue<{ access_token: string } | undefined>(
-    spotifyTokenResponseAtom
-  );
+  const [searchText, setSearchText] = useRecoilState(searchTextAtom);
+
+  const tokenResponse = useRecoilValue(spotifyTokenResponseAtom);
   const [searchResponse, setSearchResponse] = useRecoilState(
     spotifyResultSongsAtom
   );
 
-  const [types, setTypes] = useRecoilState(filterTypeSelector);
+  const types = useRecoilValue(filterTypeSelector);
 
   async function handleSearchClick() {
     if (tokenResponse) {
@@ -47,7 +36,7 @@ export function Home() {
     }
   }
 
-  const tracks = searchResponse?.tracks?.items.map((item: TrackType) => ({
+  const tracks = searchResponse?.tracks?.items.map((item) => ({
     id: item?.id,
     name: item?.name,
     artist: item?.artists[0]?.name,
@@ -57,6 +46,18 @@ export function Home() {
     releaseDate: new Intl.DateTimeFormat("pt-BR", {
       year: "numeric",
     }).format(new Date(item?.album?.release_date)),
+  }));
+
+  const albums = searchResponse?.albums?.items.map((item) => ({
+    id: item?.id,
+    name: item?.name,
+    artist: item?.artists[0]?.name,
+    handleClick: (externalUrl: string) => window.open(externalUrl, "_blank"),
+    externalUrl: item?.external_urls?.spotify,
+    imageUrl: item?.images[0]?.url,
+    releaseDate: new Intl.DateTimeFormat("pt-BR", {
+      year: "numeric",
+    }).format(new Date(item?.release_date)),
   }));
 
   return (
@@ -86,7 +87,7 @@ export function Home() {
           textAlign: "center",
         }}
       >
-        Buscar sua canção favorita
+        Busque sua canção favorita
       </h2>
 
       <div
@@ -133,17 +134,14 @@ export function Home() {
 
       <div
         style={{
-          background: "#F4F4F4",
-          // margin: '2rem 5rem',
-          maxWidth: "1200px",
-          width: "60%",
-          borderRadius: "25px",
-          margin: "0 auto",
-          padding: "2rem 3rem",
-          overflowX: "scroll",
+          display: "flex",
+          flexDirection: "column",
+          gap: "30px",
+          marginBottom: "30px",
         }}
       >
-        {tracks?.length > 0 && <Track items={tracks} />}
+        {tracks?.length > 0 && <Items items={tracks} title="Canções" />}
+        {albums?.length > 0 && <Items items={albums} title="Álbuns" />}
       </div>
     </div>
   );

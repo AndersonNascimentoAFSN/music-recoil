@@ -1,10 +1,11 @@
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 
 import {
   albumAtom,
   artistAtom,
   episodeAtom,
   playlistAtom,
+  searchTextAtom,
   showAtom,
   spotifyResultSongsAtom,
   trackAtom,
@@ -19,9 +20,17 @@ export function HomeFilters() {
   const [show, setShow] = useRecoilState(showAtom);
   const [track, setTrack] = useRecoilState(trackAtom);
 
-  const [spotify, setSpotify] = useRecoilState(spotifyResultSongsAtom);
+  const setSearchText = useSetRecoilState(searchTextAtom);
 
   const resetFilters = useResetRecoilState(filterTypeSelector);
+
+  const setSearchResponse = useSetRecoilState(spotifyResultSongsAtom);
+
+  function handleResetFilters() {
+    resetFilters();
+    setSearchResponse(undefined);
+    setSearchText("");
+  }
 
   return (
     <div
@@ -107,7 +116,7 @@ export function HomeFilters() {
         />
       </label>
 
-      <button onClick={resetFilters}>Limpar Filtros</button>
+      <button onClick={handleResetFilters}>Limpar Filtros</button>
     </div>
   );
 }
